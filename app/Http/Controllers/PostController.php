@@ -19,13 +19,13 @@ class PostController extends Controller
         $request->validate([
             'title' => ['required', 'max:255'],
             'extract' => ['required', 'max:100'],
-            'postcontent' => ['required']
+            'body' => ['required']
         ]);
 
         $post = new Post;
         $post->title = $request->input('title');
         $post->extract = $request->input('extract');
-        $post->content = $request->input('postcontent');
+        $post->content = $request->input('body');
         $post->save();
     }
 }
