@@ -6,7 +6,18 @@
 
 <h2>POSTS</h2>
 <h3><strong>Crear una publicacion</strong></h3>
-<form action="/posts" method="POST">
+
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+<form action="{{ route('post.store')  }}" method="POST">
     @csrf
     <!-- TITLE -->
     <label for="title">Titulo de la publicacion</label><br>
@@ -14,12 +25,12 @@
     <br>
 
     <!-- EXTRACT -->
-    <label for="content">Extracto publicacion</label><br>
+    <label for="extract">Extracto publicacion</label><br>
     <input type="text" id="extract" name="extract"><br><br>
     <br>
 
     <!-- CONTENT -->
-    <label for="content">Contenido publicacion</label><br>
+    <label for="postcontent">Contenido publicacion</label><br>
     <input type="text" id="postcontent" name="postcontent"><br><br>
 
     <!-- CHECKBOX -->
@@ -27,16 +38,15 @@
     <label><input type="checkbox" id="cboxcomentable" value="comentable"><strong>Comentable</strong></label><br>
 
     <!-- SELECT -->
-    <select name="acceso">
-        <option value="privado">Privado</option>
-        <option value="Publico">Publico</option>
-    </select>
+    <label>
+        <select name="acceso">
+            <option value="privado">Privado</option>
+            <option value="Publico">Publico</option>
+        </select>
+    </label>
 
     <input type="submit" value="Submit">
-
 </form>
-
-<p>If you click the "Submit" button, the form-data will be sent to a page called "/action_page.php".</p>
 
 </body>
 </html>
