@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Requests\PostPostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -15,12 +16,10 @@ class PostController extends Controller
         return view('./post/post-form');
     }
 
-    public function store(Request $request) {
-        $request->validate([
-            'title' => ['required', 'max:255'],
-            'extract' => ['required', 'max:100'],
-            'body' => ['required']
-        ]);
+    public function store(PostPostRequest $request) {
+
+
+        $request->validated();
 
         $post = new Post;
         $post->title = $request->input('title');
