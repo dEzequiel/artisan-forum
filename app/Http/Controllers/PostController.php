@@ -20,6 +20,16 @@ class PostController extends Controller
     }
 
     /**
+     * Display all created posts
+     * @return View
+     */
+    public function list(): View {
+        $posts = Post::all();
+
+        return view('post.list')->with('posts', $posts);
+    }
+
+    /**
      * Creates and saves model into database.
      * @param PostPostRequest $request
      * @return RedirectResponse
@@ -34,6 +44,6 @@ class PostController extends Controller
         $post->content = $request->input('body');
         $post->save();
 
-        return Redirect::route('post.index');
+        return Redirect::route('post.list');
     }
 }
