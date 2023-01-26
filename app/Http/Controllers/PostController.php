@@ -3,21 +3,28 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\PostPostRequest;
 use App\Models\Post;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 
 class PostController extends Controller
 {
     /**
-     * Form to create a post
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * Display the post creation form.
+     * @return View
      */
-    public function index() {
-        return view('./post/post-form');
+    public function index(): View {
+        return view('post.form');
     }
 
-    public function store(PostPostRequest $request) {
-
+    /**
+     * Creates and saves model into database.
+     * @param PostPostRequest $request
+     * @return RedirectResponse
+     */
+    public function store(PostPostRequest $request): RedirectResponse {
 
         $request->validated();
 
@@ -26,5 +33,7 @@ class PostController extends Controller
         $post->extract = $request->input('extract');
         $post->content = $request->input('body');
         $post->save();
+
+        return Redirect::route('post.index');
     }
 }

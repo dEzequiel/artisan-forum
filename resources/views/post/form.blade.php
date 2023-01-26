@@ -1,16 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
+    @vite('resources/css/app.css')
+    <style>
+        .alert-danger {
+            color: red;
+        }
+    </style>
+
 </head>
 <body>
 
 <h3><strong>Add Post</strong></h3>
 
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li style="color: red">{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
 <form action="{{ route('post.store')  }}" method="POST">
     @csrf
     <!-- TITLE -->
     <label for="title">Title</label><br>
-    <input type="text" id="title" name="title" value="{{ old('title')  }}"><br>
+    <input type="text" id="title" name="title" value="{{ old('title')  }}" ><br> <!-- required -->
 
     @error('title')
         <div class="alert alert-danger">{{ $message }}</div>
@@ -30,7 +47,7 @@
 
     <!-- CONTENT -->
     <label for="content">Content</label><br>
-    <input type="text" id="body" name="body" value="{{ old('body')  }}"><br>
+    <input type="text" id="body" name="body" value="{{ old('body')  }}"><br> <!-- required -->
     @error('body')
         <div class="alert alert-danger">{{ $message }}</div>
     @enderror
