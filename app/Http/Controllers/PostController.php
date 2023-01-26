@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 use App\Http\Requests\PostPostRequest;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -42,6 +44,7 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->extract = $request->input('extract');
         $post->content = $request->input('body');
+        $post->user_id = auth()->user()->getAuthIdentifier();
         $post->save();
 
         return Redirect::route('post.list');
