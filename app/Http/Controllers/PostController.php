@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostPostRequest;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -36,7 +37,7 @@ class PostController extends Controller
      * @param PostPostRequest $request
      * @return RedirectResponse
      */
-    public function store(PostPostRequest $request): View {
+    public function store(PostPostRequest $request): JsonResponse {
 
         $request->validated();
 
@@ -47,6 +48,7 @@ class PostController extends Controller
         $post->user_id = auth()->user()->getAuthIdentifier();
         $post->save();
 
-        return view('post.form');
+        return response()->json('Post created successfully!', 201);
+
     }
 }
