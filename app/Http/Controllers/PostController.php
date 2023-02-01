@@ -36,7 +36,7 @@ class PostController extends Controller
      * @param PostPostRequest $request
      * @return RedirectResponse
      */
-    public function store(PostPostRequest $request): RedirectResponse {
+    public function store(PostPostRequest $request): View {
 
         $request->validated();
 
@@ -47,6 +47,6 @@ class PostController extends Controller
         $post->user_id = auth()->user()->getAuthIdentifier();
         $post->save();
 
-        return Redirect::route('post.list');
+        return view('post.form');
     }
 }
