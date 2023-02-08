@@ -5,6 +5,11 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Post') }}
         </h2>
+
+        <div class="pt-2">
+            <a class="active" href="#home">All</a>
+        </div>
+
     </x-slot>
 
     <div class="py-12">
@@ -14,7 +19,8 @@
                     @csrf
                     <!-- TITLE -->
                         <label for="title" class="">Title</label><br>
-                        <input class="w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50" type="text" id="title" name="title" value="{{ old('title')  }}" ><br> <!-- required -->
+                        <input class="w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50"
+                               type="text" id="title" name="title" value="{{ old('title')  }}" ><br> <!-- required -->
 
                     @error('title')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -24,7 +30,8 @@
 
                     <!-- EXTRACT -->
                     <label for="extract">Short Description</label><br>
-                    <input class="w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50" type="text" id="extract" name="extract" value="{{ old('extract')  }}"><br>
+                    <input class="w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50" type="text"
+                           id="extract" name="extract" value="{{ old('extract')  }}"><br>
 
                     @error('extract')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -34,23 +41,29 @@
 
                     <!-- CONTENT -->
                     <label for="content">Content</label><br>
-                    <textarea id="message" rows="10" class="w-full p-2 w-full rounded-lg border-gray-300" placeholder="Write your thoughts here..."></textarea>                    @error('body')
+                    <textarea id="message" rows="10" class="w-full p-2 w-full rounded-lg border-gray-300"
+                              placeholder="Write your thoughts here..."></textarea>                    @error('body')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
 
                     <br>
 
                     <!-- CHECKBOX -->
-                    <label><input type="checkbox" id="cboxcaducable" value="caducable"><strong>Caducable</strong></label>
-                    <label><input type="checkbox" id="cboxcomentable" value="comentable"><strong>Comentable</strong></label><br>
+                    <div class="pr-3">
+                        <input id="checked-checkbox" type="checkbox" value=""
+                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        Caducable
+
+                        <input id="checked-checkbox" type="checkbox" value=""
+                               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        Comentable
+                    </div>
 
                     <!-- SELECT -->
-                    <label>
-                        <select name="acceso">
-                            <option value="privado">Privado</option>
-                            <option value="Publico">Publico</option>
-                        </select>
-                    </label>
+                    <select class="border border-gray-300 rounded-lg bg-gray-50" name="acceso">
+                        <option value="privado">Privado</option>
+                        <option value="Publico">Publico</option>
+                    </select>
 
                     <input type="submit" value="Submit">
                 </form>
