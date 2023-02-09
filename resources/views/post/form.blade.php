@@ -41,7 +41,7 @@
 
                     <!-- CONTENT -->
                     <label for="content">Content</label><br>
-                    <textarea id="body" rows="10" class="w-full p-2 w-full rounded-lg border-gray-300"
+                    <textarea id="body" name="body" rows="10" class="w-full p-2 w-full rounded-lg border-gray-300"
                               placeholder="Write your thoughts here..."></textarea>                    @error('body')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
@@ -50,11 +50,11 @@
 
                     <!-- CHECKBOX -->
                     <div class="pr-3">
-                        <input id="checked-checkbox" type="checkbox" value=""
+                        <input id="expirable" type="checkbox" name="expirable" value="1"
                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                         Caducable
 
-                        <input id="checked-checkbox" type="checkbox" value=""
+                        <input id="commentable" type="checkbox" name="commentable" value="1"
                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                         Comentable
                     </div>
