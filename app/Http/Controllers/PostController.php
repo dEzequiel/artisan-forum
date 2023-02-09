@@ -45,6 +45,8 @@ class PostController extends Controller
         $post->title = $request->input('title');
         $post->extract = $request->input('extract');
         $post->content = $request->input('body');
+        $post->expirable = ($request->input('expirable')) ? '1' : '0';
+        $post->commentable = ($request->input('commentable')) ? '1' : '0';
         $post->user_id = auth()->user()->getAuthIdentifier();
         $post->save();
 
