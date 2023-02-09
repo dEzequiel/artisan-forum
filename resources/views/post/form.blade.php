@@ -41,7 +41,7 @@
 
                     <!-- CONTENT -->
                     <label for="content">Content</label><br>
-                    <textarea id="message" rows="10" class="w-full p-2 w-full rounded-lg border-gray-300"
+                    <textarea id="body" rows="10" class="w-full p-2 w-full rounded-lg border-gray-300"
                               placeholder="Write your thoughts here..."></textarea>                    @error('body')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
