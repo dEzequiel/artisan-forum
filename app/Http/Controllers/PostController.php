@@ -36,10 +36,9 @@ class PostController extends Controller
 
     public function edit($id): View {
 
-        //$post = Post::query()->where('id', $id)->get();
-          $post = Post::query()->find($id);
+        $post = Post::query()->find($id);
 
-        return view('post.edit')->with('title', $post->title);
+        return view('post.edit')->with('post', $post);
 
     }
 
