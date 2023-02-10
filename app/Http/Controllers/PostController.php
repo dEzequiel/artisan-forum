@@ -8,7 +8,9 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -28,15 +30,18 @@ class PostController extends Controller
      * @return View
      */
     public function list(): View {
-        $user = auth()->user()->getAuthIdentifier();
-        $posts = Post::query()->where('user_id', $user)->get();
+        $posts = Post::all();
 
         return view('post.list')->with('posts', $posts);
     }
 
-    public function edit($id): View {
+    public function edit($id) {
 
-        $post = Post::query()->find($id);
+        $post = Post::query()->where('id', '=', $id)->get()->first();
+
+        if (!Gate::allows('update-post', $post)) {
+            abort(403);
+        }
 
         return view('post.edit')->with('post', $post);
 
@@ -66,8 +71,7 @@ class PostController extends Controller
             echo 'Caught exception: ',  $e->getMessage(), "\n";
         }
 
-
         return response()->json('Post created successfully!', 201);
-
     }
+
 }

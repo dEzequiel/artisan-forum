@@ -7,6 +7,7 @@
         </h2>
 
         <div class="pt-2">
+            {{ auth()->user()->getAuthIdentifier() }}
             <a class="active mr-4" href="#home">All</a>
             <a class="active" href="#myPosts">My Posts</a>
         </div>
