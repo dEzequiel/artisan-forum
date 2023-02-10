@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostPostRequest;
 use App\Models\Post;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,8 +28,19 @@ class PostController extends Controller
      * @return View
      */
     public function list(): View {
-        $posts = Post::all();
+        $user = auth()->user()->getAuthIdentifier();
+        $posts = Post::query()->where('user_id', $user)->get();
+
         return view('post.list')->with('posts', $posts);
+    }
+
+    public function edit($id): View {
+
+        //$post = Post::query()->where('id', $id)->get();
+          $post = Post::query()->find($id);
+
+        return view('post.edit')->with('title', $post->title);
+
     }
 
     /**
@@ -48,7 +60,13 @@ class PostController extends Controller
         $post->commentable = ($request->input('commentable')) ? '1' : '0';
         $post->visibility = $request->get('visibility');
         $post->user_id = auth()->user()->getAuthIdentifier();
-        $post->save();
+
+        try {
+            $post->save();
+        } catch (Exception $e) {
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        }
+
 
         return response()->json('Post created successfully!', 201);
 
