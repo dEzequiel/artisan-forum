@@ -26,7 +26,8 @@ class Post extends Model
         'content',
         'extract',
         'commentable',
-        'expirable'
+        'expirable',
+        'visibility'
     ];
 
         /**

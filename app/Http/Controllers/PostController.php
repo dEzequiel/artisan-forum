@@ -28,7 +28,6 @@ class PostController extends Controller
      */
     public function list(): View {
         $posts = Post::all();
-
         return view('post.list')->with('posts', $posts);
     }
 
@@ -47,6 +46,7 @@ class PostController extends Controller
         $post->content = $request->input('body');
         $post->expirable = ($request->input('expirable')) ? '1' : '0';
         $post->commentable = ($request->input('commentable')) ? '1' : '0';
+        $post->visibility = $request->get('visibility');
         $post->user_id = auth()->user()->getAuthIdentifier();
         $post->save();
 

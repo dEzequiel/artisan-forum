@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('extract');
             $table->string('content');
+            $table->boolean('visibility');
             $table->boolean('expirable')->nullable();
             $table->boolean('commentable')->nullable();
             $table->timestamp('created_at');
