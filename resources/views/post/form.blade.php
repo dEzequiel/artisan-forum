@@ -7,8 +7,11 @@
         </h2>
 
         <div class="pt-2">
-            <a class="active" href="#home">All</a>
+            <a class="active mr-4" href="#home">All</a>
+            <a class="active" href="{{route('post.list')}}">My Posts</a>
+
         </div>
+
 
     </x-slot>
 
@@ -60,9 +63,9 @@
                     </div>
 
                     <!-- SELECT -->
-                    <select class="border border-gray-300 rounded-lg bg-gray-50" name="acceso">
-                        <option value="privado">Privado</option>
-                        <option value="Publico">Publico</option>
+                    <select class="border border-gray-300 rounded-lg bg-gray-50" id="visibility" name="visibility">
+                        <option value="0">Privado</option>
+                        <option value="1">Publico</option>
                     </select>
 
                     <input type="submit" value="Submit">
