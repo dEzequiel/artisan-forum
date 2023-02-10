@@ -74,4 +74,23 @@ class PostController extends Controller
         return response()->json('Post created successfully!', 201);
     }
 
+    public function update(PostPostRequest $request, $id): JsonResponse {
+
+        $data = $request->all();
+
+        Post::query()
+            ->where('id', $id)
+            ->update([
+                'title' => $data['title'] ,
+                'extract' => $data['extract'],
+                'content' => $data['body'],
+                'expirable' => isset($data['expirable']) ? '1' : '0',
+                'commentable' => isset($data['commentable']) ? '1' : '0',
+                'visibility' => $data['visibility']
+            ]);
+
+        return response()->json('Post with id=' . $id . ' updated!', 200);
+
+    }
+
 }
