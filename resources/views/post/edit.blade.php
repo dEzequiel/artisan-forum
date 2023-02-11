@@ -7,7 +7,6 @@
         </h2>
 
         <div class="pt-2">
-            <a class="active mr-4" href="#home">All</a>
             <a class="active" href="{{route('post.list')}}">My Posts</a>
 
         </div>
