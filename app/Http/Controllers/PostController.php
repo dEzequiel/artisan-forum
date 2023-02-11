@@ -35,7 +35,12 @@ class PostController extends Controller
         return view('post.list')->with('posts', $posts);
     }
 
-    public function edit($id) {
+    /**
+     * Display form to edit post
+     * @param $id
+     * @return View
+     */
+    public function edit($id): View {
 
         $post = Post::query()->where('id', '=', $id)->get()->first();
 
@@ -44,7 +49,6 @@ class PostController extends Controller
         }
 
         return view('post.edit')->with('post', $post);
-
     }
 
     /**
@@ -74,6 +78,12 @@ class PostController extends Controller
         return response()->json('Post created successfully!', 201);
     }
 
+    /**
+     * Update existing post
+     * @param PostPostRequest $request
+     * @param $id Post identifier to update
+     * @return JsonResponse
+     */
     public function update(PostPostRequest $request, $id): JsonResponse {
 
         $data = $request->all();
