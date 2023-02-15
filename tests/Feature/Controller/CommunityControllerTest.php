@@ -36,4 +36,20 @@ class CommunityControllerTest extends TestCase
             ->assertStatus(200)
             ->json($expectedMessage);
     }
+
+    public function test_should_add_community_and_return_201Created(): void
+    {
+        // Arrange
+
+        // Act
+        $response = $this->postJson('/api/community', [
+                'name' => 'Test',
+                'description' => 'Test',
+            ]);
+
+        // Assert
+        $response
+            ->assertStatus(201)
+            ->assertExactJson(['Community created successfully!']);
+    }
 }
