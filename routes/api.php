@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/community', [CommunityController::class, 'index']);
+Route::get('/community/getAll', [CommunityController::class, 'getAll']);
 Route::get('/community/{id}', [CommunityController::class, 'get']);
 Route::post('/community', [CommunityController::class, 'store']);
 Route::delete('/community', [CommunityController::class, 'delete']);

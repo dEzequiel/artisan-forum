@@ -22,6 +22,12 @@ class CommunityController extends Controller
         return response()->json($result, 200);
     }
 
+    public function getAll(): JsonResponse {
+        $result = Community::all();
+
+        return response()->json($result, 200);
+    }
+
     public function store(Request $request): JsonResponse
      {
 
