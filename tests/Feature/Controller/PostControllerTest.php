@@ -45,7 +45,8 @@ class PostControllerTest extends TestCase
             ->postJson('/post', [
                 'title' => 'Test',
                 'body' => 'Test',
-                'extract' => 'Test'
+                'extract' => 'Test',
+                'visibility' => true
             ]);
 
         // Assert
