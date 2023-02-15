@@ -67,4 +67,18 @@ class CommunityControllerTest extends TestCase
             ->assertStatus(200)
             ->assertExactJson(['Community deleted successfully!']);
     }
+
+    public function test_should_update_community_and_return_200OK(): void {
+        // Arrange
+        $communityId = 1            ;
+
+        // Act
+        $response = $this->patchJson('/api/community', ['id' => strval($communityId), 'name' => 'testeo',
+            'description' => 'testeo']);
+
+        // Assert
+        $response
+            ->assertStatus(200)
+            ->assertExactJson(['Community updated successfully!']);
+    }
 }
