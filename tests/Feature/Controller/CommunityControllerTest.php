@@ -40,6 +40,7 @@ class CommunityControllerTest extends TestCase
     public function test_should_add_community_and_return_201Created(): void
     {
         // Arrange
+        $communityId = 2;
 
         // Act
         $response = $this->postJson('/api/community', [
@@ -51,5 +52,19 @@ class CommunityControllerTest extends TestCase
         $response
             ->assertStatus(201)
             ->assertExactJson(['Community created successfully!']);
+    }
+
+    public function test_should_delete_community_and_return_201Created(): void
+    {
+        // Arrange
+        $communityId = 2;
+
+        // Act
+        $response = $this->deleteJson('/api/community', ['id' => strval($communityId)]);
+
+        // Assert
+        $response
+            ->assertStatus(200)
+            ->assertExactJson(['Community deleted successfully!']);
     }
 }
