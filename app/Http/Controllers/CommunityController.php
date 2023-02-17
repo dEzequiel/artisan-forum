@@ -6,6 +6,8 @@ use App\Models\Community;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
 
 class CommunityController extends Controller
 {
@@ -41,10 +43,11 @@ class CommunityController extends Controller
              echo 'Caught exception: ',  $e->getMessage(), "\n";
          }
 
-         return response()->json('Community created successfully!', 201);
+         return response()->json($community, 201);
      }
 
-     public function delete(Request $request): JsonResponse {
+     public function delete(Request $request): Response
+     {
 
         $communityId = $request->input('id');
 
@@ -54,7 +57,7 @@ class CommunityController extends Controller
              echo 'Caught exception: ',  $e->getMessage(), "\n";
          }
 
-         return response()->json('Community deleted successfully!', 200);
+         return response(true, 200);
      }
 
      public function update(Request $request): JsonResponse {
@@ -70,7 +73,9 @@ class CommunityController extends Controller
             echo 'Caught exception: ',  $e->getMessage(), "\n";
         }
 
-         return response()->json('Community updated successfully!', 200);
+        $community = Community::query()->where('id', '=', $communityId)->get();
+
+         return response()->json($community, 200);
 
      }
 }

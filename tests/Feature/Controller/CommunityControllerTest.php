@@ -22,10 +22,9 @@ class CommunityControllerTest extends TestCase
 
         // Act
         $response = $this->getJson('/api/community/' . $community->id);
-        $result = $response->decodeResponseJson();
 
         // Assert
-        $response->assertStatus(200);
+        $response->assertOk();
         $response->assertJson([
             'id' => $community->id,
             'name' => $community->name,
@@ -47,61 +46,72 @@ class CommunityControllerTest extends TestCase
             ->json($expectedMessage);
     }
 
-    public function test_getAll_should_return_collection_of_communities_200OK(): void {
+    public function test_getAll_should_return_collection_of_communities_200OK(): void
+    {
         // Arrange
-        $countTotal = 5;
+        $totalCount = 5;
+        $community = Community::factory($totalCount)->create();
 
         // Act
         $response = $this->getJson('/api/community/getAll');
-        $result = $response->decodeResponseJson();
 
         // Assert
-        $response->assertStatus(200);
+        $response->assertOk();
+        $response->assertJsonCount($totalCount);
 
     }
 
     public function test_should_add_community_and_return_201Created(): void
     {
-        // Arrange
-        $communityId = 2;
-
         // Act
         $response = $this->postJson('/api/community', [
                 'name' => 'Test',
                 'description' => 'Test',
             ]);
 
+        $community = Community::query()->first();
+
         // Assert
-        $response
-            ->assertStatus(201)
-            ->assertExactJson(['Community created successfully!']);
+        $response->assertCreated();
+        $response->assertJson([
+            'id' => $community->id,
+            'name' => $community->name,
+            'description' => $community->description,
+        ]);
     }
 
-    public function test_should_delete_community_and_return_201Created(): void
+    public function test_should_delete_community_and_return_200OK_True(): void
     {
         // Arrange
-        $communityId = 2;
+        $community = Community::factory(3)->create();
+        $idToDelete = $community[2]['id'];
 
         // Act
-        $response = $this->deleteJson('/api/community', ['id' => strval($communityId)]);
+        $response = $this->deleteJson('/api/community', ['id' => $idToDelete]);
+        $content = $response->getContent();
+
+        $communities = Community::all();
 
         // Assert
-        $response
-            ->assertStatus(200)
-            ->assertExactJson(['Community deleted successfully!']);
+        $response->assertOk();
+        self::assertEquals(true, boolval($content));
+        self::assertCount(2, $communities);
     }
 
     public function test_should_update_community_and_return_200OK(): void {
+
         // Arrange
-        $communityId = 1            ;
+        $community = Community::factory()->create();
+        $idToUpdate = $community->id;
 
         // Act
-        $response = $this->patchJson('/api/community', ['id' => strval($communityId), 'name' => 'testeo',
-            'description' => 'testeo']);
+        $response = $this->patchJson('/api/community', [
+            'id' => $idToUpdate,
+            'name' => 'testeo',
+            'description' => 'testeo'
+        ]);
 
         // Assert
-        $response
-            ->assertStatus(200)
-            ->assertExactJson(['Community updated successfully!']);
+        $response->assertOk();
     }
 }
