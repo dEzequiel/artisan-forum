@@ -21,7 +21,7 @@ class CommunityControllerTest extends TestCase
         $community = Community::factory()->create();
 
         // Act
-        $response = $this->getJson('/api/community/' . $community->id);
+        $response = $this->getJson(route('get', [$community->id]));
 
         // Assert
         $response->assertOk();
@@ -38,7 +38,7 @@ class CommunityControllerTest extends TestCase
         $expectedMessage = 'Hello, World!';
 
         // Act
-        $response = $this->getJson('/api/community');
+        $response = $this->getJson(route('index'));
 
         // Assert
         $response
@@ -53,7 +53,7 @@ class CommunityControllerTest extends TestCase
         $community = Community::factory($totalCount)->create();
 
         // Act
-        $response = $this->getJson('/api/community/getAll');
+        $response = $this->getJson(route('getAll'));
 
         // Assert
         $response->assertOk();
@@ -64,10 +64,10 @@ class CommunityControllerTest extends TestCase
     public function test_should_add_community_and_return_201Created(): void
     {
         // Act
-        $response = $this->postJson('/api/community', [
+        $response = $this->postJson(route('add', [
                 'name' => 'Test',
                 'description' => 'Test',
-            ]);
+            ]));
 
         $community = Community::query()->first();
 
@@ -87,7 +87,7 @@ class CommunityControllerTest extends TestCase
         $idToDelete = $community[2]['id'];
 
         // Act
-        $response = $this->deleteJson('/api/community', ['id' => $idToDelete]);
+        $response = $this->deleteJson(route('delete', ['id' => $idToDelete]));
         $content = $response->getContent();
 
         $communities = Community::all();
@@ -105,11 +105,11 @@ class CommunityControllerTest extends TestCase
         $idToUpdate = $community->id;
 
         // Act
-        $response = $this->patchJson('/api/community', [
+        $response = $this->patchJson(route('update', [
             'id' => $idToUpdate,
             'name' => 'testeo',
             'description' => 'testeo'
-        ]);
+        ]));
 
         // Assert
         $response->assertOk();
