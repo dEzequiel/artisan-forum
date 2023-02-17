@@ -2,10 +2,14 @@
 
 namespace Controller;
 
+use App\Models\Community;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class CommunityControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * A basic feature test example.
      *
@@ -14,14 +18,20 @@ class CommunityControllerTest extends TestCase
     public function test_get_should_return_community_by_id()
     {
         // Arrange
-        $communityId = 1;
+        $community = Community::factory()->create();
 
         // Act
-        $response = $this->getJson('/api/community', ['id' => strval($communityId)]);
+        $response = $this->getJson('/api/community/' . $community->id);
+        $result = $response->decodeResponseJson();
 
         // Assert
-        $response
-            ->assertStatus(200);
+        $response->assertStatus(200);
+        $response->assertJson([
+            'id' => $community->id,
+            'name' => $community->name,
+            'description' => $community->description
+        ]);
+
     }
 
     public function test_get_should_return_hello_world() {
@@ -35,6 +45,19 @@ class CommunityControllerTest extends TestCase
         $response
             ->assertStatus(200)
             ->json($expectedMessage);
+    }
+
+    public function test_getAll_should_return_collection_of_communities_200OK(): void {
+        // Arrange
+        $countTotal = 5;
+
+        // Act
+        $response = $this->getJson('/api/community/getAll');
+        $result = $response->decodeResponseJson();
+
+        // Assert
+        $response->assertStatus(200);
+
     }
 
     public function test_should_add_community_and_return_201Created(): void
