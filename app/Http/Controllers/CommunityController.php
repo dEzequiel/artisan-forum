@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CommunityResource;
+use App\Http\Resources\ErrorResource;
 use App\Models\Community;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Psy\Util\Json;
 
 
 class CommunityController extends Controller
@@ -22,16 +25,10 @@ class CommunityController extends Controller
         $result = Community::query()->where('id', '=', $id)->get()->first();
 
         if(is_null($result)) {
-            $error = array(
-                'code'      => 404,
-                'message'   => 'Community with id ' . $id . ' not found!',
-                'data'      => null
-            );
-
-            return response()->json($error);
+            return (new ErrorResource(404, 'Community not found'))->response();
         }
 
-        return response()->json($result, 200);
+        return (new CommunityResource($result))->response();
     }
 
     public function getAll(): JsonResponse {
