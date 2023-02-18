@@ -21,6 +21,16 @@ class CommunityController extends Controller
 
         $result = Community::query()->where('id', '=', $id)->get()->first();
 
+        if(is_null($result)) {
+            $error = array(
+                'code'      => 404,
+                'message'   => 'Community with id ' . $id . ' not found!',
+                'data'      => null
+            );
+
+            return response()->json($error);
+        }
+
         return response()->json($result, 200);
     }
 
