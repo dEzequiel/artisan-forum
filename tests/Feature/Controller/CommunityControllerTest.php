@@ -33,6 +33,24 @@ class CommunityControllerTest extends TestCase
 
     }
 
+    public function test_get_should_return_error_when_community_not_found()
+    {
+        // Arrange
+        $idToSearch = rand(1,50);
+
+        // Act
+        $response = $this->getJson(route('get', [$idToSearch]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertJson([
+            'code'      => 404,
+            'message'   => 'Community with id ' . $idToSearch . ' not found!',
+            'data'      => null
+        ]);
+
+    }
+
     public function test_get_should_return_hello_world() {
         // Arrange
         $expectedMessage = 'Hello, World!';
