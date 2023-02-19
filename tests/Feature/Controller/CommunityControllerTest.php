@@ -36,6 +36,9 @@ class CommunityControllerTest extends TestCase
                     'community_id' => $community->id,
                     'name' => $community->name,
                     'description' => $community->description
+                ],
+                'links' => [
+                    'self' => route('api.v1.community.get', $community->getRouteKey())
                 ]
             ]
         ]);
@@ -65,51 +68,24 @@ class CommunityControllerTest extends TestCase
         );
     }
 
-//    public function test_get_should_return_error_when_community_not_found()
-//    {
-//        // Arrange
-//        $idToSearch = rand(1,50);
-//
-//        // Act
-//        $response = $this->getJson(route('get', [$idToSearch]));
-//
-//        // Assert
-//        $response->assertOk();
-//        $response->assertJson([
-//            'code'      => 404,
-//            'message'   => 'Community with id ' . $idToSearch . ' not found!',
-//            'data'      => null
-//        ]);
-//
-//    }
+    public function test_getAll_should_return_collection_of_communities_200OK(): void
+    {
+        // Arrange
+        $totalCount = 2;
+        $community = Community::factory($totalCount)->create();
 
-//    public function test_get_should_return_hello_world() {
-//        // Arrange
-//        $expectedMessage = 'Hello, World!';
-//
-//        // Act
-//        $response = $this->getJson(route('index'));
-//
-//        // Assert
-//        $response
-//            ->assertStatus(200)
-//            ->json($expectedMessage);
-//    }
+        // Act
+        $response = $this->getJson(route('getAll'));
 
-//    public function test_getAll_should_return_collection_of_communities_200OK(): void
-//    {
-//        // Arrange
-//        $totalCount = 5;
-//        $community = Community::factory($totalCount)->create();
-//
-//        // Act
-//        $response = $this->getJson(route('getAll'));
-//
-//        // Assert
-//        $response->assertOk();
-//        $response->assertJsonCount($totalCount);
-//
-//    }
+        // Assert
+        $response->assertOk();
+        $response->assertJsonCount($totalCount);
+
+        $response->assertHeader(
+            'Content-Type', 'application/vnd.api+json'
+        );
+
+    }
 
 //    public function test_should_add_community_and_return_201Created(): void
 //    {
