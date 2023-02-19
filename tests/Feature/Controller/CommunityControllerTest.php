@@ -39,9 +39,12 @@ class CommunityControllerTest extends TestCase
                 ]
             ]
         ]);
-    }
 
-    public function test_get_should_return_error_when_communit_not_found()
+        $response->assertHeader(
+            'Content-Type', 'application/vnd.api+json'
+        );    }
+
+    public function test_get_should_return_error_when_community_not_found()
     {
         // Arrange
         $idToFind = rand(2, 50);
@@ -56,6 +59,10 @@ class CommunityControllerTest extends TestCase
             'message' => 'Community not found',
             'data' => null
         ]);
+
+        $response->assertHeader(
+            'Content-Type', 'application/json'
+        );
     }
 
 //    public function test_get_should_return_error_when_community_not_found()
