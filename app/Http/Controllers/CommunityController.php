@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\HttpCode;
 use App\Http\Resources\CommunityCollectionResource;
 use App\Http\Resources\CommunityResource;
 use App\Http\Resources\ErrorResource;
@@ -39,7 +40,6 @@ class CommunityController extends Controller
 
     public function store(Request $request): JsonResponse
      {
-
          $community = new Community;
 
          try {
@@ -50,7 +50,7 @@ class CommunityController extends Controller
              echo 'Caught exception: ',  $e->getMessage(), "\n";
          }
 
-         return (new CommunityResource($community))->response();
+         return (new CommunityResource($community))->response()->setStatusCode(HttpCode::CREATED);
      }
 
      public function delete(Request $request): JsonResponse
@@ -77,7 +77,7 @@ class CommunityController extends Controller
          $result = $this->getCommunityIfExists($id);
 
          if (!($result instanceof Community)) {
-             return (new ErrorResource(404, 'COMMUNITY NOT FOUND'))->response();
+             return $result;
          }
 
          try {
@@ -97,7 +97,7 @@ class CommunityController extends Controller
         $community = Community::query()->where('id', '=', $id)->get()->first();
 
         if(is_null($community)) {
-            return (new ErrorResource(404, 'COMMUNITY NOT FOUND'))->response();
+            return (new ErrorResource(404, 'COMMUNITY NOT FOUND'))->response()->setStatusCode(HttpCode::NOT_FOUND);
         }
 
         return $community;

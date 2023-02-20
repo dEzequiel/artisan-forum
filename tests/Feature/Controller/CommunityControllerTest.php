@@ -18,7 +18,7 @@ class CommunityControllerTest extends TestCase
      *
      * @return void
      */
-    public function test_get_should_return_community_by_id()
+    public function test_get_should_return_community_by_id(): void
     {
         // Arrange
         $community = Community::factory()->create();
@@ -57,7 +57,7 @@ class CommunityControllerTest extends TestCase
         $response = $this->getJson(route('api.v1.community.get', [$nonexistentId]));
 
         // Assert
-        $response->assertOk();
+        $response->assertNotFound();
         $response->assertJson([
             'code' => 404,
             'message' => 'COMMUNITY NOT FOUND',
@@ -198,7 +198,7 @@ class CommunityControllerTest extends TestCase
         $response = $this->deleteJson(route('api.v1.community.delete', ['id' => $nonexistentId]));
 
         // Assert
-        $response->assertOk();
+        $response->assertNotFound();
         $response->assertJson([
             'code' => 404,
             'message' => 'COMMUNITY NOT FOUND',
@@ -258,7 +258,7 @@ class CommunityControllerTest extends TestCase
         ]));
 
         // Assert
-        $response->assertOk();
+        $response->assertNotFound();
         $response->assertJson([
             'code' => 404,
             'message' => 'COMMUNITY NOT FOUND',
