@@ -75,17 +75,36 @@ class CommunityControllerTest extends TestCase
         $community = Community::factory($totalCount)->create();
 
         // Act
-        $response = $this->getJson(route('getAll'));
+        $response = $this->getJson(route('api.v1.community.getAll'));
+        $json_decode = json_decode($response->getContent(), true);
 
         // Assert
         $response->assertOk();
-        $response->assertJsonCount($totalCount);
+        $this->assertCount($totalCount, $json_decode['data']);
+        $response->assertJson([
+            'data' => [
+                [
+                    'id' => $community[0]->id,
+                    'name' => $community[0]->name,
+                    'description' => $community[0]->description
+                ],
+                [
+                    'id' => $community[1]->id,
+                    'name' => $community[1]->name,
+                    'description' => $community[1]->description
+                ]
+            ],
+            'links' => [
+                'self' => route('api.v1.community.getAll')
+            ]
+        ]);
 
         $response->assertHeader(
             'Content-Type', 'application/vnd.api+json'
         );
-
     }
+
+
 
 //    public function test_should_add_community_and_return_201Created(): void
 //    {
