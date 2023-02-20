@@ -20,4 +20,13 @@ class CommunityDeleteResponseResource extends JsonResource
                     'self' => route('api.v1.community.delete')]
         ];
     }
+
+    public function withResponse($request, $response)
+    {
+        $response->withHeaders([
+            'Content-Type' => "application/vnd.api+json"
+        ]);
+
+        return parent::withResponse($request, $response);
+    }
 }
