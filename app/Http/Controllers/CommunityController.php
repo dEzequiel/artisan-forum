@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CommunityCollectionResource;
 use App\Http\Resources\CommunityResource;
 use App\Http\Resources\ErrorResource;
-use App\Http\Resources\ResponseResource;
+use App\Http\Resources\CommunityDeleteResponseResource;
 use App\Models\Community;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -65,7 +65,7 @@ class CommunityController extends Controller
              echo 'Caught exception: ',  $e->getMessage(), "\n";
          }
 
-         return (new ResponseResource(boolval($isDeleted)))->response();
+         return (new CommunityDeleteResponseResource(boolval($isDeleted)))->response();
      }
 
      public function update(Request $request): JsonResponse {
