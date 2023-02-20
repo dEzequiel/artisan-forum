@@ -156,23 +156,30 @@ class CommunityControllerTest extends TestCase
         ]);
     }
 
-//    public function test_should_delete_community_and_return_200OK_True(): void
-//    {
-//        // Arrange
-//        $community = Community::factory(3)->create();
-//        $idToDelete = $community[2]['id'];
-//
-//        // Act
-//        $response = $this->deleteJson(route('delete', ['id' => $idToDelete]));
-//        $content = $response->getContent();
-//
-//        $communities = Community::all();
-//
-//        // Assert
-//        $response->assertOk();
-//        self::assertEquals(true, boolval($content));
-//        self::assertCount(2, $communities);
-//    }
+    public function test_should_delete_community_and_return_200OK_True(): void
+    {
+        // Arrange
+        $community = Community::factory(3)->create();
+        $idToDelete = $community[2]['id'];
+
+        // Act
+        $response = $this->deleteJson(route('api.v1.community.delete', ['id' => $idToDelete]));
+        $json_decode = json_decode($response->getContent(), true);
+
+        $communities = Community::all();
+
+        // Assert
+        $response->assertOk();
+        $response->assertJson([
+            'data' => [
+                'isDeleted' => $json_decode['data']['isDeleted']
+                ],
+                'links' => [
+                    'self' => route('api.v1.community.delete')
+                ]
+            ]);
+        self::assertCount(2, $communities);
+    }
 
 //    public function test_should_update_community_and_return_200OK(): void {
 //
