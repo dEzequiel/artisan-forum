@@ -48,19 +48,19 @@ class CommunityControllerTest extends TestCase
         );
     }
 
-    public function test_get_should_return_error_when_community_not_found()
+    public function test_get_should_not_get_community_by_id()
     {
         // Arrange
-        $idToFind = rand(2, 50);
+        $nonexistentId = 32;
 
         // Act
-        $response = $this->getJson(route('api.v1.community.get', [$idToFind]));
+        $response = $this->getJson(route('api.v1.community.get', [$nonexistentId]));
 
         // Assert
         $response->assertOk();
         $response->assertJson([
             'code' => 404,
-            'message' => 'Community not found',
+            'message' => 'COMMUNITY NOT FOUND',
             'data' => null
         ]);
 
@@ -189,6 +189,27 @@ class CommunityControllerTest extends TestCase
         );
     }
 
+    public function test_should_not_delete_community_when_not_found(): void
+    {
+        // Arrange
+        $nonexistentId = 32;
+
+        // Act
+        $response = $this->deleteJson(route('api.v1.community.delete', ['id' => $nonexistentId]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertJson([
+            'code' => 404,
+            'message' => 'COMMUNITY NOT FOUND',
+            'data' => null
+        ]);
+
+        $response->assertHeader(
+            'Content-Type', 'application/json'
+        );
+    }
+
     public function test_should_update_community_and_return_200OK(): void {
 
         // Arrange
@@ -221,6 +242,31 @@ class CommunityControllerTest extends TestCase
 
         $response->assertHeader(
             'Content-Type', 'application/vnd.api+json'
+        );
+    }
+
+    public function test_should_not_update_community_when_not_found(): void
+    {
+        // Arrange
+        $nonexistentId = 32;
+
+        // Act
+        $response = $this->patchJson(route('api.v1.community.update', [
+            'id' => $nonexistentId,
+            'name' => 'Test',
+            'description' => 'Test'
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertJson([
+            'code' => 404,
+            'message' => 'COMMUNITY NOT FOUND',
+            'data' => null
+        ]);
+
+        $response->assertHeader(
+            'Content-Type', 'application/json'
         );
     }
 }
