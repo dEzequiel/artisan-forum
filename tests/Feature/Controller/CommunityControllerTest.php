@@ -128,24 +128,33 @@ class CommunityControllerTest extends TestCase
         );
     }
 
-//    public function test_should_add_community_and_return_201Created(): void
-//    {
-//        // Act
-//        $response = $this->postJson(route('add', [
-//                'name' => 'Test',
-//                'description' => 'Test',
-//            ]));
-//
-//        $community = Community::query()->first();
-//
-//        // Assert
-//        $response->assertCreated();
-//        $response->assertJson([
-//            'id' => $community->id,
-//            'name' => $community->name,
-//            'description' => $community->description,
-//        ]);
-//    }
+    public function test_should_add_community_and_return_201Created(): void
+    {
+        // Act
+        $response = $this->postJson(route('add', [
+                'name' => 'Test',
+                'description' => 'Test',
+            ]));
+
+        $community = Community::query()->first();
+
+        // Assert
+       $response->assertCreated();
+        $response->assertJson([
+            'data' => [
+                'type' => 'community',
+                'id' => $community->id,
+                'attributes' => [
+                    'community_id' => $community->id,
+                    'name' => $community->name,
+                    'description' => $community->description
+                ],
+                'links' => [
+                    'self' => route('api.v1.community.get', $community->getRouteKey())
+                ]
+            ]
+        ]);
+    }
 
 //    public function test_should_delete_community_and_return_200OK_True(): void
 //    {
