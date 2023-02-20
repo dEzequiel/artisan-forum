@@ -8,6 +8,7 @@ use App\Http\Resources\ErrorResource;
 use App\Http\Resources\CommunityDeleteResponseResource;
 use App\Models\Community;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -68,22 +69,30 @@ class CommunityController extends Controller
          return (new CommunityDeleteResponseResource(boolval($isDeleted)))->response();
      }
 
-     public function update(Request $request): JsonResponse {
-        $communityId = $request->input('id');
+     public function update(Request $request, $id): JsonResponse {
+        $community = $this->getCommunityIfExists($id);
 
         try {
-            Community::query()->where('id', '=', $communityId)->update([
+            Community::query()->where('id', '=', $id)->update([
                 'name' => $request->input('name'),
                 'description' => $request->input('description')
             ]);
-
         } catch (Exception $e) {
             echo 'Caught exception: ',  $e->getMessage(), "\n";
         }
 
-        $community = Community::query()->where('id', '=', $communityId)->get();
 
-         return response()->json($community, 200);
+        $updatedCommunity = $community->refresh();
+         return (new CommunityResource($updatedCommunity))->response();
+     }
 
+     private function getCommunityIfExists($id): Community {
+        $community = Community::query()->where('id', '=', $id)->get()->first();
+
+        if(is_null($community)) {
+            throw new ModelNotFoundException('COMMUNITY NOT FOUND');
+        }
+
+        return $community;
      }
 }
