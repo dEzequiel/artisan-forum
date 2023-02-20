@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\CommunityCollectionResource;
 use App\Http\Resources\CommunityResource;
 use App\Http\Resources\ErrorResource;
 use App\Models\Community;
@@ -9,7 +10,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Psy\Util\Json;
 
 
 class CommunityController extends Controller
@@ -34,23 +34,23 @@ class CommunityController extends Controller
     public function getAll(): JsonResponse {
         $result = Community::all();
 
-        return response()->json($result, 200);
+        return ( new CommunityCollectionResource($result))->response();
     }
 
     public function store(Request $request): JsonResponse
      {
 
          $community = new Community;
-         $community->name = $request->input('name');
-         $community->description = $request->input('description');
 
          try {
+             $community->name = $request->input('name');
+             $community->description = $request->input('description');
              $community->save();
          } catch (Exception $e) {
              echo 'Caught exception: ',  $e->getMessage(), "\n";
          }
 
-         return response()->json($community, 201);
+         return (new CommunityResource($community))->response();
      }
 
      public function delete(Request $request): Response
