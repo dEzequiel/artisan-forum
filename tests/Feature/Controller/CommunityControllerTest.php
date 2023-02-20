@@ -104,7 +104,29 @@ class CommunityControllerTest extends TestCase
         );
     }
 
+    public function test_getAll_should_return_empty_collection_of_communities_200OK(): void
+    {
+        // Arrange
+        $totalCount = 0;
 
+        // Act
+        $response = $this->getJson(route('api.v1.community.getAll'));
+        $json_decode = json_decode($response->getContent(), true);
+
+        // Assert
+        $response->assertOk();
+        $this->assertCount($totalCount, $json_decode['data']);
+        $response->assertJson([
+            'data' => [],
+            'links' => [
+                'self' => route('api.v1.community.getAll')
+            ]
+        ]);
+
+        $response->assertHeader(
+            'Content-Type', 'application/vnd.api+json'
+        );
+    }
 
 //    public function test_should_add_community_and_return_201Created(): void
 //    {
