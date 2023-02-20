@@ -45,7 +45,8 @@ class CommunityControllerTest extends TestCase
 
         $response->assertHeader(
             'Content-Type', 'application/vnd.api+json'
-        );    }
+        );
+    }
 
     public function test_get_should_return_error_when_community_not_found()
     {
@@ -154,6 +155,9 @@ class CommunityControllerTest extends TestCase
                 ]
             ]
         ]);
+        $response->assertHeader(
+            'Content-Type', 'application/vnd.api+json'
+        );
     }
 
     public function test_should_delete_community_and_return_200OK_True(): void
@@ -169,6 +173,7 @@ class CommunityControllerTest extends TestCase
         $communities = Community::all();
 
         // Assert
+        self::assertCount(2, $communities);
         $response->assertOk();
         $response->assertJson([
             'data' => [
@@ -178,23 +183,44 @@ class CommunityControllerTest extends TestCase
                     'self' => route('api.v1.community.delete')
                 ]
             ]);
-        self::assertCount(2, $communities);
+
+        $response->assertHeader(
+            'Content-Type', 'application/vnd.api+json'
+        );
     }
 
-//    public function test_should_update_community_and_return_200OK(): void {
-//
-//        // Arrange
-//        $community = Community::factory()->create();
-//        $idToUpdate = $community->id;
-//
-//        // Act
-//        $response = $this->patchJson(route('update', [
-//            'id' => $idToUpdate,
-//            'name' => 'testeo',
-//            'description' => 'testeo'
-//        ]));
-//
-//        // Assert
-//        $response->assertOk();
-//    }
+    public function test_should_update_community_and_return_200OK(): void {
+
+        // Arrange
+        $community = Community::factory()->create();
+        $idToUpdate = $community->id;
+
+        // Act
+        $response = $this->patchJson(route('api.v1.community.update', [
+            'id' => $idToUpdate,
+            'name' => 'Test',
+            'description' => 'Test'
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertJson([
+            'data' => [
+                'type' => 'community',
+                'id' => $idToUpdate,
+                'attributes' => [
+                    'community_id' => $community->id,
+                    'name' => 'Test',
+                    'description' => 'Test'
+                ],
+                'links' => [
+                    'self' => route('api.v1.community.update', $community->getRouteKey())
+                ]
+            ]
+        ]);
+
+        $response->assertHeader(
+            'Content-Type', 'application/vnd.api+json'
+        );
+    }
 }
