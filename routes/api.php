@@ -24,12 +24,12 @@ Route::controller(CommunityController::class)
     ->middleware('auth:sanctum')
     ->group(function () {
         Route::get('/community', 'index')->name('index');
-        Route::get('/community/getAll', 'getAll')->name('getAll');
-        Route::get('/community/{id}', 'get')->name('get');
+        Route::get('/community/getAll', 'getAll')->name('api.v1.community.getAll');
+        Route::get('/community/{id}', 'get')->name('api.v1.community.get');
         Route::post('/community', 'store')->name('add');
-        Route::delete('/community', 'delete')->name('delete');
-        Route::patch('/community', 'update')->name('update');
-    })->name('api.community');
+        Route::delete('/community', 'delete')->name('api.v1.community.delete');
+        Route::patch('/community/{id}', 'update')->name('api.v1.community.update');
+    });
 
 
 Route::controller(TokenAdminController::class)->group(function () {

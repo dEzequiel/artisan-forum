@@ -3,14 +3,15 @@
 namespace Controller;
 
 use App\Models\Community;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class CommunityControllerTest extends TestCase
 {
     use RefreshDatabase;
-    use WithoutMiddleware;
 
 
     /**
@@ -18,10 +19,24 @@ class CommunityControllerTest extends TestCase
      *
      * @return void
      */
+
+    public function test_get_should_return_hello_world(): void {
+        // Arrange
+        $expectedMessage = 'Hello, World!';
+        Sanctum::actingAs(User::factory()->create());
+
+        // Act
+        $response = $this->getJson(route('index'));
+
+        // Assert
+        $response->assertOk();
+    }
+
     public function test_get_should_return_community_by_id(): void
     {
         // Arrange
         $community = Community::factory()->create();
+        Sanctum::actingAs(User::factory()->create());
 
         // Act
         $response = $this->getJson(route('api.v1.community.get', [$community->id]));
@@ -52,6 +67,7 @@ class CommunityControllerTest extends TestCase
     {
         // Arrange
         $nonexistentId = 32;
+        Sanctum::actingAs(User::factory()->create());
 
         // Act
         $response = $this->getJson(route('api.v1.community.get', [$nonexistentId]));
@@ -74,6 +90,7 @@ class CommunityControllerTest extends TestCase
         // Arrange
         $totalCount = 2;
         $community = Community::factory($totalCount)->create();
+        Sanctum::actingAs(User::factory()->create());
 
         // Act
         $response = $this->getJson(route('api.v1.community.getAll'));
@@ -109,6 +126,7 @@ class CommunityControllerTest extends TestCase
     {
         // Arrange
         $totalCount = 0;
+        Sanctum::actingAs(User::factory()->create());
 
         // Act
         $response = $this->getJson(route('api.v1.community.getAll'));
@@ -131,6 +149,9 @@ class CommunityControllerTest extends TestCase
 
     public function test_should_add_community_and_return_201Created(): void
     {
+        // Arrange
+        Sanctum::actingAs(User::factory()->create());
+
         // Act
         $response = $this->postJson(route('add', [
                 'name' => 'Test',
@@ -165,6 +186,7 @@ class CommunityControllerTest extends TestCase
         // Arrange
         $community = Community::factory(3)->create();
         $idToDelete = $community[2]['id'];
+        Sanctum::actingAs(User::factory()->create());
 
         // Act
         $response = $this->deleteJson(route('api.v1.community.delete', ['id' => $idToDelete]));
@@ -193,6 +215,7 @@ class CommunityControllerTest extends TestCase
     {
         // Arrange
         $nonexistentId = 32;
+        Sanctum::actingAs(User::factory()->create());
 
         // Act
         $response = $this->deleteJson(route('api.v1.community.delete', ['id' => $nonexistentId]));
@@ -215,6 +238,7 @@ class CommunityControllerTest extends TestCase
         // Arrange
         $community = Community::factory()->create();
         $idToUpdate = $community->id;
+        Sanctum::actingAs(User::factory()->create());
 
         // Act
         $response = $this->patchJson(route('api.v1.community.update', [
@@ -249,6 +273,7 @@ class CommunityControllerTest extends TestCase
     {
         // Arrange
         $nonexistentId = 32;
+        Sanctum::actingAs(User::factory()->create());
 
         // Act
         $response = $this->patchJson(route('api.v1.community.update', [
