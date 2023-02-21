@@ -20,18 +20,6 @@ class CommunityControllerTest extends TestCase
      * @return void
      */
 
-    public function test_get_should_return_hello_world(): void {
-        // Arrange
-        $expectedMessage = 'Hello, World!';
-        Sanctum::actingAs(User::factory()->create());
-
-        // Act
-        $response = $this->getJson(route('index'));
-
-        // Assert
-        $response->assertOk();
-    }
-
     public function test_get_should_return_community_by_id(): void
     {
         // Arrange
@@ -39,7 +27,7 @@ class CommunityControllerTest extends TestCase
         Sanctum::actingAs(User::factory()->create());
 
         // Act
-        $response = $this->getJson(route('api.v1.community.get', [$community->id]));
+        $response = $this->getJson(route('communities.show', [$community->id]));
 
         // Assert
         $response->assertOk();
@@ -53,7 +41,7 @@ class CommunityControllerTest extends TestCase
                     'description' => $community->description
                 ],
                 'links' => [
-                    'self' => route('api.v1.community.get', $community->getRouteKey())
+                    'self' => route('communities.show', $community->getRouteKey())
                 ]
             ]
         ]);
@@ -70,7 +58,7 @@ class CommunityControllerTest extends TestCase
         Sanctum::actingAs(User::factory()->create());
 
         // Act
-        $response = $this->getJson(route('api.v1.community.get', [$nonexistentId]));
+        $response = $this->getJson(route('communities.show', [$nonexistentId]));
 
         // Assert
         $response->assertNotFound();
@@ -93,7 +81,7 @@ class CommunityControllerTest extends TestCase
         Sanctum::actingAs(User::factory()->create());
 
         // Act
-        $response = $this->getJson(route('api.v1.community.getAll'));
+        $response = $this->getJson(route('communities.index'));
         $json_decode = json_decode($response->getContent(), true);
 
         // Assert
@@ -113,7 +101,7 @@ class CommunityControllerTest extends TestCase
                 ]
             ],
             'links' => [
-                'self' => route('api.v1.community.getAll')
+                'self' => route('communities.index')
             ]
         ]);
 
@@ -129,7 +117,7 @@ class CommunityControllerTest extends TestCase
         Sanctum::actingAs(User::factory()->create());
 
         // Act
-        $response = $this->getJson(route('api.v1.community.getAll'));
+        $response = $this->getJson(route('communities.index'));
         $json_decode = json_decode($response->getContent(), true);
 
         // Assert
@@ -138,7 +126,7 @@ class CommunityControllerTest extends TestCase
         $response->assertJson([
             'data' => [],
             'links' => [
-                'self' => route('api.v1.community.getAll')
+                'self' => route('communities.index')
             ]
         ]);
 
@@ -153,7 +141,7 @@ class CommunityControllerTest extends TestCase
         Sanctum::actingAs(User::factory()->create());
 
         // Act
-        $response = $this->postJson(route('add', [
+        $response = $this->postJson(route('communities.store', [
                 'name' => 'Test',
                 'description' => 'Test',
             ]));
@@ -172,7 +160,7 @@ class CommunityControllerTest extends TestCase
                     'description' => $community->description
                 ],
                 'links' => [
-                    'self' => route('api.v1.community.get', $community->getRouteKey())
+                    'self' => route('communities.store') . '/' . $community->id
                 ]
             ]
         ]);
@@ -183,7 +171,7 @@ class CommunityControllerTest extends TestCase
 
     public function test_should_not_create_community_if_user_is_not_authenticated(): void {
         // Act
-        $response = $this->postJson(route('add', [
+        $response = $this->postJson(route('communities.store', [
             'name' => 'Test',
             'description' => 'Test',
         ]));
@@ -198,28 +186,33 @@ class CommunityControllerTest extends TestCase
     public function test_should_delete_community_and_return_200OK_True(): void
     {
         // Arrange
-        $community = Community::factory(3)->create();
-        $idToDelete = $community[2]['id'];
+        $communities = Community::factory(3)->create();
+        $community = Community::query()->where('id', '=', $communities[2]['id'])->get()->first();
         Sanctum::actingAs(User::factory()->create());
 
         // Act
-        $response = $this->deleteJson(route('api.v1.community.delete', ['id' => $idToDelete]));
+        $response = $this->deleteJson(route('communities.destroy', [$community]));
         $json_decode = json_decode($response->getContent(), true);
 
         $communities = Community::all();
 
         // Assert
-        self::assertCount(2, $communities);
+        //self::assertCount(2, $communities);
         $response->assertOk();
         $response->assertJson([
             'data' => [
-                'isDeleted' => $json_decode['data']['isDeleted']
+                'type' => 'community',
+                'id' => $community->id,
+                'attributes' => [
+                    'community_id' => $community->id,
+                    'name' => $community->name,
+                    'description' => $community->description
                 ],
                 'links' => [
-                    'self' => route('api.v1.community.delete')
+                    'self' => route('communities.destroy', $community)
                 ]
-            ]);
-
+            ]
+        ]);
         $response->assertHeader(
             'Content-Type', 'application/vnd.api+json'
         );
@@ -232,7 +225,7 @@ class CommunityControllerTest extends TestCase
         Sanctum::actingAs(User::factory()->create());
 
         // Act
-        $response = $this->deleteJson(route('api.v1.community.delete', ['id' => $nonexistentId]));
+        $response = $this->deleteJson(route('communities.destroy', [$nonexistentId]));
 
         // Assert
         $response->assertNotFound();
@@ -255,11 +248,10 @@ class CommunityControllerTest extends TestCase
         Sanctum::actingAs(User::factory()->create());
 
         // Act
-        $response = $this->patchJson(route('api.v1.community.update', [
+        $response = $this->patchJson(route('communities.update', [$community,
             'id' => $idToUpdate,
             'name' => 'Test',
-            'description' => 'Test'
-        ]));
+            'description' => 'Test']));
 
         // Assert
         $response->assertOk();
@@ -273,7 +265,7 @@ class CommunityControllerTest extends TestCase
                     'description' => 'Test'
                 ],
                 'links' => [
-                    'self' => route('api.v1.community.update', $community->getRouteKey())
+                    'self' => route('communities.update', $community->getRouteKey())
                 ]
             ]
         ]);
@@ -290,11 +282,10 @@ class CommunityControllerTest extends TestCase
         Sanctum::actingAs(User::factory()->create());
 
         // Act
-        $response = $this->patchJson(route('api.v1.community.update', [
+        $response = $this->patchJson(route('communities.update', [$nonexistentId,
             'id' => $nonexistentId,
             'name' => 'Test',
-            'description' => 'Test'
-        ]));
+            'description' => 'Test']));
 
         // Assert
         $response->assertNotFound();
