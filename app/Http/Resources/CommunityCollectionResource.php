@@ -18,7 +18,7 @@ class CommunityCollectionResource extends ResourceCollection
         return [
             'data' => $this->collection,
             'links' => [
-                'self' => route('api.v1.community.getAll'),
+                'self' => route('communities.index'),
             ],
         ];
     }

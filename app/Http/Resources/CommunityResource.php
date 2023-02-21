@@ -25,7 +25,7 @@ class CommunityResource extends JsonResource
                 'description' => $this->resource->description
             ],
             'links' => [
-                'self' => route('api.v1.community.get', $this->resource->getRouteKey())]
+                'self' => route('communities.show', $this->resource->id)]
             ]
         ];
     }
