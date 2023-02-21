@@ -181,6 +181,20 @@ class CommunityControllerTest extends TestCase
         );
     }
 
+    public function test_should_not_create_community_if_user_is_not_authenticated(): void {
+        // Act
+        $response = $this->postJson(route('add', [
+            'name' => 'Test',
+            'description' => 'Test',
+        ]));
+
+        // Assert
+        $response->assertStatus(401);
+        $response->assertHeader(
+            'Content-Type', 'application/json'
+        );
+    }
+
     public function test_should_delete_community_and_return_200OK_True(): void
     {
         // Arrange
