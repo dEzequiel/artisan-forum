@@ -1,0 +1,188 @@
+{
+	"info": {
+		"_postman_id": "d00f91ff-1177-4b26-8d35-4cf744785a36",
+		"name": "Communities",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Community API Reference",
+			"item": [
+				{
+					"name": "communities",
+					"_postman_id": "33398990-b5ef-4c22-9afa-dcd328ea74ea",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				},
+				{
+					"name": "community",
+					"_postman_id": "34a46bc5-5dc7-44fa-8f25-14ac66d429bf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				},
+				{
+					"name": "add community",
+					"_postman_id": "f9b5bbe2-3572-4223-93f9-6ee4264ad018",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "Bearer {{TOKEN}}"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Community name\",\r\n    \"description\": \"Community description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{url}}/communities"
+					},
+					"response": []
+				},
+				{
+					"name": "delete community",
+					"_postman_id": "79afc930-df0b-4dcd-a932-fc45674740d4",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "Bearer {{TOKEN}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/communities/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"communities",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "16",
+									"type": "string"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update community",
+					"_postman_id": "a6559995-e7cc-4308-bd48-9eb3e22a8108",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "Bearer {{TOKEN}}"
+							}
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Community name\",\r\n    \"description\": \"Community description\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/communities/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"communities",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "9",
+									"type": "string"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"_postman_id": "06d73fff-7bea-4736-8d6e-88c2bcf9d23a"
+		},
+		{
+			"name": "tokenize",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "eb7e6a99-d325-4c49-b710-4db02247df63",
+						"exec": [
+							"pm.environment.set(\"TOKEN\", pm.response.json().bearer_token)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"_postman_id": "4fdd48f4-e920-41b2-829e-ed11e84fce09",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/generate?user_id=10",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"generate"
+					],
+					"query": [
+						{
+							"key": "user_id",
+							"value": "10",
+							"type": "text"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
