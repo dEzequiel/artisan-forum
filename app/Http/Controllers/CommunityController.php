@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\HttpCode;
 use App\Http\Resources\CommunityCollectionResource;
 use App\Http\Resources\CommunityResource;
-use App\Http\Resources\ErrorResource;
+use App\Http\Resources\ErrorResponseResource;
 use App\Http\Resources\CommunityDeleteResponseResource;
 use App\Models\Community;
 use Exception;
@@ -97,7 +97,7 @@ class CommunityController extends Controller
         $community = Community::query()->where('id', '=', $id)->get()->first();
 
         if(is_null($community)) {
-            return (new ErrorResource(404, 'COMMUNITY NOT FOUND'))->response()->setStatusCode(HttpCode::NOT_FOUND);
+            return (new ErrorResponseResource(HttpCode::NOT_FOUND, 'COMMUNITY NOT FOUND'))->response()->setStatusCode(HttpCode::NOT_FOUND);
         }
 
         return $community;
