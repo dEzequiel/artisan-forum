@@ -20,17 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::controller(CommunityController::class)
-    ->middleware('auth:sanctum')
-    ->group(function () {
-        Route::get('/community', 'index')->name('index');
-        Route::get('/community/getAll', 'getAll')->name('api.v1.community.getAll');
-        Route::get('/community/{id}', 'get')->name('api.v1.community.get');
-        Route::post('/community', 'store')->name('add');
-        Route::delete('/community', 'delete')->name('api.v1.community.delete');
-        Route::patch('/community/{id}', 'update')->name('api.v1.community.update');
-    });
-
+Route::apiResource('communities', CommunityController::class)->middleware('auth:sanctum');
 
 Route::controller(TokenAdminController::class)->group(function () {
     Route::post('/generate', 'generateToken')->name('generate');
