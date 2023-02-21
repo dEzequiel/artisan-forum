@@ -6,7 +6,6 @@ use App\Http\HttpCode;
 use App\Http\Resources\CommunityCollectionResource;
 use App\Http\Resources\CommunityResource;
 use App\Http\Resources\ErrorResponseResource;
-use App\Http\Resources\CommunityDeleteResponseResource;
 use App\Models\Community;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -15,14 +14,14 @@ use Illuminate\Http\Request;
 
 class CommunityController extends Controller
 {
-    //
 
     public function index(): JsonResponse {
-        return response()->json('Hello, World!', 200);
+        $result = Community::all();
+
+        return (new CommunityCollectionResource($result))->response();
     }
 
-    public function get($id): JsonResponse {
-
+    public function show($id): JsonResponse {
         $result = $this->getCommunityIfExists($id);
 
         if (!($result instanceof Community)) {
@@ -32,14 +31,7 @@ class CommunityController extends Controller
         return (new CommunityResource($result))->response();
     }
 
-    public function getAll(): JsonResponse {
-        $result = Community::all();
-
-        return ( new CommunityCollectionResource($result))->response();
-    }
-
-    public function store(Request $request): JsonResponse
-     {
+    public function store(Request $request): JsonResponse {
          $community = new Community;
 
          try {
@@ -52,28 +44,24 @@ class CommunityController extends Controller
 
          return (new CommunityResource($community))->response()->setStatusCode(HttpCode::CREATED);
      }
-
-     public function delete(Request $request): JsonResponse
-     {
-        $communityId = $request->input('id');
-        $result = $this->getCommunityIfExists($communityId);
+     public function destroy($id): JsonResponse {
+        $result = $this->getCommunityIfExists($id);
 
          if (!($result instanceof Community)) {
              return $result;
          }
 
          try {
-             $isDeleted = $result->delete();
+             $result->delete();
          } catch (Exception $e) {
              echo 'Caught exception: ',  $e->getMessage(), "\n";
          }
 
-         return (new CommunityDeleteResponseResource(boolval($isDeleted)))->response();
+         return (new CommunityResource($result))->response();
      }
 
 
-     public function update(Request $request, $id): JsonResponse
-     {
+     public function update(Request $request, $id): JsonResponse {
          $result = $this->getCommunityIfExists($id);
 
          if (!($result instanceof Community)) {
